@@ -1,5 +1,7 @@
 "use client";
 
+import { UserCard } from "@/components/UserCard";
+import { cleanUser } from "@/libs/cleanUser";
 import axios from "axios";
 import { useState } from "react";
 
@@ -19,6 +21,9 @@ export default function RandomUserPage() {
     //Your code here
     //Process result from api response with map function. Tips use function from /src/libs/cleanUser
     //Then update state with function : setUsers(...)
+    const cleanedUsers = users.map((user) => cleanUser(user));
+    setUsers(cleanedUsers);
+    localStorage.setItem("key", genAmount);
   };
 
   return (
@@ -40,7 +45,17 @@ export default function RandomUserPage() {
       {isLoading && (
         <p className="display-6 text-center fst-italic my-4">Loading ...</p>
       )}
-      {users && !isLoading && users.map(/*code map rendering UserCard here */)}
+      {users &&
+        !isLoading &&
+        users.map((user, key) => (
+          <UserCard
+            key={key}
+            name={user.name}
+            imgUrl={user.imgUrl}
+            address={user.address}
+            email={user.email}
+          ></UserCard>
+        ))}
     </div>
   );
 }
